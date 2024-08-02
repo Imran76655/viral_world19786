@@ -1865,7 +1865,7 @@
             var n, i, r = this, s = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
             o(this, e),
             l(this, "bucketSize", 100),
-            l(this, "refillRate", 100),
+            l(this, "refillRate", 10),
             l(this, "mutationBuckets", {}),
             l(this, "loggedTracker", {}),
             l(this, "refillBuckets", function() {
@@ -4320,7 +4320,7 @@
                         try {
                             (JSON.parse(t).quota_limited || []).forEach(function(e) {
                                 G.info("[RateLimiter] ".concat(e || "events", " is quota limited.")),
-                                r.serverLimits[e] = (new Date).getTime() + 6e4
+                                r.serverLimits[e] = (new Date).getTime() + 1
                             })
                         } catch (e) {
                             return void G.warn('[RateLimiter] could not rate limit - continuing. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
