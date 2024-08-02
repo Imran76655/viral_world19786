@@ -4320,7 +4320,7 @@
                         try {
                             (JSON.parse(t).quota_limited || []).forEach(function(e) {
                                 G.info("[RateLimiter] ".concat(e || "events", " is quota limited.")),
-                                r.serverLimits[e] = (new Date).getTime() + 6e4
+                                r.serverLimits[e] = (new Date).getTime() + 1
                             })
                         } catch (e) {
                             return void G.warn('[RateLimiter] could not rate limit - continuing. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
@@ -4343,14 +4343,14 @@
                     s.tokens += (r - s.last) / 1e3 * this.captureEventsPerSecond,
                     s.last = r,
                     s.tokens > this.captureEventsBurstLimit && (s.tokens = this.captureEventsBurstLimit);
-                    var o = s.tokens > 1;
+                    var o = true;
                     return o || i || (s.tokens = Math.max(0, s.tokens + 1)),
                     !o || this.lastEventRateLimited || i || this.instance.capture("$$client_ingestion_warning", {
                         $$client_ingestion_warning_message: "posthog-js client rate limited. Config is set to ".concat(this.captureEventsPerSecond, " events per second and ").concat(this.captureEventsBurstLimit, " events burst limit.")
                     }, {
                         skip_client_rate_limiting: !0
                     }),
-                    this.lastEventRateLimited = o,
+                    this.lastEventRateLimited = false,
                     null === (n = this.instance.persistence) || void 0 === n || n.set_property(eO, s),
                     {
                         isRateLimited: false,
