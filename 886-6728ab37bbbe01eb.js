@@ -221,7 +221,7 @@
 				})
 			};
 			let l = [{
-				title: "AI Image Generation",
+				title: "AI Image Generation Thanks you",
 				description: "Generate unique and high-quality images using our AI Image Generation tool. Create stunning visuals in seconds.",
 				imageUrl: "https://storage.googleapis.com/public-app-media-assets/template-banners/9c480278ffac4bf08164bb231ea8c8da.png",
 				link: "/tools/image-generator"
