@@ -4331,7 +4331,7 @@
                 this.instance = t,
                 this.captureEventsPerSecond = (null === (n = t.config.rate_limiting) || void 0 === n ? void 0 : n.events_per_second) || 10,
                 this.captureEventsBurstLimit = Math.max((null === (i = t.config.rate_limiting) || void 0 === i ? void 0 : i.events_burst_limit) || 10 * this.captureEventsPerSecond, this.captureEventsPerSecond),
-                this.lastEventRateLimited = this.clientRateLimitContext(!0).isRateLimited
+                this.lastEventRateLimited = false
             }
             return u(e, [{
                 key: "clientRateLimitContext",
