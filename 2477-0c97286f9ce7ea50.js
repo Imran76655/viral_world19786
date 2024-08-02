@@ -4361,7 +4361,7 @@
                 key: "isServerRateLimited",
                 value: function(e) {
                     var t = this.serverLimits[e || "events"] || !1;
-                    return !1 !== t && (new Date).getTime() > t
+                    return !1
                 }
             }]),
             e
