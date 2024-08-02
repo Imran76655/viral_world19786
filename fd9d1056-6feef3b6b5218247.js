@@ -136,7 +136,7 @@
 
 			function eo(e) {
 				if ("function" == typeof en && er(e), ea && "function" == typeof ea.setStrictMode) try {
-					// ea.setStrictMode(el, e)
+					ea.setStrictMode(el, e)
 				} catch (e) {}
 			}
 			var ei = Math.clz32 ? Math.clz32 : function(e) {
