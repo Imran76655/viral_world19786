@@ -1865,7 +1865,7 @@
             var n, i, r = this, s = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
             o(this, e),
             l(this, "bucketSize", 100),
-            l(this, "refillRate", 10),
+            l(this, "refillRate", 100),
             l(this, "mutationBuckets", {}),
             l(this, "loggedTracker", {}),
             l(this, "refillBuckets", function() {
