@@ -12,10 +12,13 @@
 			});
 			var a = r(57437),
 				i = r(2265);
-			let n = (0, i.createContext)(void 0),
+			let n = (0,
+					i.createContext)(void 0),
 				s = () => {
-					let e = (0, i.useContext)(n);
-					if (!e) throw Error("useToolContext must be used within a ToolProvider");
+					let e = (0,
+						i.useContext)(n);
+					if (!e)
+						throw Error("useToolContext must be used within a ToolProvider");
 					return e
 				},
 				o = e => {
@@ -25,7 +28,8 @@
 						canonicalUrl: i,
 						copy: s
 					} = e;
-					return (0, a.jsx)(n.Provider, {
+					return (0,
+						a.jsx)(n.Provider, {
 						value: {
 							jsonLd: r,
 							canonicalUrl: i,
@@ -61,25 +65,34 @@
 					deepLinkParams: f
 				} = e, {
 					copy: h
-				} = (0, m.z)(), x = (0, o.a)("(min-width: 1024px)");
-				(0, p.useEffect)(() => {
+				} = (0,
+					m.z)(), x = (0,
+					o.a)("(min-width: 1024px)");
+				(0,
+					p.useEffect)(() => {
 					u && l.r.capture("rate-limit-alert-opened", {
 						tool: r
 					})
 				}, [u, r]);
-				let b = (0, a.jsxs)(a.Fragment, {
-					children: [(0, a.jsxs)("div", {
+				let b = (0,
+					a.jsxs)(a.Fragment, {
+					children: [(0,
+						a.jsxs)("div", {
 						className: "relative -mt-8",
-						children: [(0, a.jsx)(d.default, {
+						children: [(0,
+							a.jsx)(d.default, {
 							src: "/rate-limit/grid.png",
 							alt: "Rate limit alert",
 							width: 500,
 							height: 160
-						}), (0, a.jsx)("div", {
+						}), (0,
+							a.jsx)("div", {
 							className: "absolute top-12 w-full flex items-center justify-center",
-							children: (0, a.jsx)("div", {
+							children: (0,
+								a.jsx)("div", {
 								className: "bg-background-tertiary border border-background-grouped-tertiary rounded-full p-3 shadow-lg h-[90px] w-[90px] flex items-center justify-center",
-								children: (0, a.jsx)(d.default, {
+								children: (0,
+									a.jsx)(d.default, {
 									src: "/rate-limit/crown.png",
 									alt: "Rate limit alert",
 									width: 80,
@@ -88,48 +101,62 @@
 								})
 							})
 						})]
-					}), (0, a.jsxs)("div", {
+					}), (0,
+						a.jsxs)("div", {
 						className: "space-y-6 mt-8 p-8",
-						children: [(0, a.jsxs)("div", {
+						children: [(0,
+							a.jsxs)("div", {
 							className: "space-y-4 text-center",
-							children: [(0, a.jsx)("h3", {
+							children: [(0,
+								a.jsx)("h3", {
 								className: "text-2xl font-semibold text-text-primary",
-								children: "Want More Free Runs?"
-							}), (0, a.jsx)("p", {
+								children: "Limited?"
+							}), (0,
+								a.jsx)("p", {
 								className: "text-text-secondary",
 								children: "Create an account to keep going."
 							})]
-						}), (0, a.jsx)(i.default, {
+						}), (0,
+							a.jsx)(i.default, {
 							deepLinkSlug: h.deepLinkSlug,
 							deepLinkParams: f,
 							variant: "primary",
 							size: "xl",
 							className: "w-full",
-							rightIcon: (0, a.jsx)(c.Z, {
+							rightIcon: (0,
+								a.jsx)(c.Z, {
 								size: 16
 							}),
 							children: "Continue for Free"
 						})]
 					})]
 				});
-				return (0, a.jsx)(a.Fragment, {
-					children: x ? (0, a.jsx)(n.Vq, {
+				return (0,
+					a.jsx)(a.Fragment, {
+					children: x ? (0,
+						a.jsx)(n.Vq, {
 						open: u,
 						onOpenChange: g,
-						children: (0, a.jsxs)(n.cZ, {
-							children: [(0, a.jsx)(n.fK, {
-								children: (0, a.jsx)(n.$N, {
+						children: (0,
+							a.jsxs)(n.cZ, {
+							children: [(0,
+								a.jsx)(n.fK, {
+								children: (0,
+									a.jsx)(n.$N, {
 									className: "hidden",
 									children: "Want More Free Runs?"
 								})
-							}), (0, a.jsx)(n.Be, {
+							}), (0,
+								a.jsx)(n.Be, {
 								children: b
 							})]
 						})
-					}) : (0, a.jsx)(s.dy, {
+					}) : (0,
+						a.jsx)(s.dy, {
 						open: u,
 						onOpenChange: g,
-						children: (0, a.jsx)(s.sc, {
+						children: (0,
+							a.jsx)(s.sc, {
 							className: "max-h-[90vh] overflow-y-auto",
 							children: b
 						})
@@ -153,15 +180,19 @@
 					badgeText: n,
 					headingType: s = "h1"
 				} = e;
-				return (0, a.jsxs)("div", {
+				return (0,
+					a.jsxs)("div", {
 					className: "flex flex-col gap-4",
-					children: [(0, a.jsx)("div", {
+					children: [(0,
+						a.jsx)("div", {
 						className: "flex"
-					}), (0, a.jsxs)("div", {
+					}), (0,
+						a.jsxs)("div", {
 						className: "flex flex-col gap-2 text-center mx-auto lg:max-w-xl max-w-sm",
 						children: [i.createElement(s, {
 							className: "text-[30px] lg:text-[40px] font-semibold"
-						}, t.replaceAll("{{", "").replaceAll("}}", "").replaceAll("<br>", "")), (0, a.jsx)("p", {
+						}, t.replaceAll("{{", "").replaceAll("}}", "").replaceAll("<br>", "")), (0,
+							a.jsx)("p", {
 							className: "text-gray-500",
 							children: r
 						})]
@@ -187,32 +218,39 @@
 					imageUrl: o,
 					link: l
 				} = e;
-				return (0, a.jsxs)("a", {
+				return (0,
+					a.jsxs)("a", {
 					href: l,
 					className: "block bg-background-primary border-2 border-border-primary hover:border-brand-primary rounded-xl overflow-clip shadow-lg",
-					children: [(0, a.jsx)(s.default, {
+					children: [(0,
+						a.jsx)(s.default, {
 						src: o,
 						alt: t,
 						title: "".concat(t, " - ").concat(r),
 						width: 520,
 						height: 478,
 						className: "mx-auto"
-					}), (0, a.jsxs)("div", {
+					}), (0,
+						a.jsxs)("div", {
 						className: "space-y-4 p-4",
-						children: [(0, a.jsx)("h3", {
+						children: [(0,
+							a.jsx)("h3", {
 							className: "text-[20px] leading-[24px] font-semibold text-text-primary line-clamp-2 h-[48px]",
 							style: {
 								letterSpacing: "-0.045rem"
 							},
 							children: t
-						}), (0, a.jsx)("p", {
+						}), (0,
+							a.jsx)("p", {
 							className: "text-[14px] leading-[20px] font-normal text-text-secondary line-clamp-2",
 							children: r
-						}), (0, a.jsx)(i.zx, {
+						}), (0,
+							a.jsx)(i.zx, {
 							variant: "gray",
 							size: "sm",
 							className: "w-full",
-							rightIcon: (0, a.jsx)(n.Z, {
+							rightIcon: (0,
+								a.jsx)(n.Z, {
 								className: "w-4 h-4"
 							}),
 							children: "Try for Free"
@@ -221,7 +259,7 @@
 				})
 			};
 			let l = [{
-				title: "AI Image Generation Thanks you",
+				title: "AI Image Generation",
 				description: "Generate unique and high-quality images using our AI Image Generation tool. Create stunning visuals in seconds.",
 				imageUrl: "https://storage.googleapis.com/public-app-media-assets/template-banners/9c480278ffac4bf08164bb231ea8c8da.png",
 				link: "/tools/image-generator"
@@ -291,11 +329,14 @@
 				let {
 					limit: t
 				} = e;
-				return (0, a.jsx)("div", {
+				return (0,
+					a.jsx)("div", {
 					className: "space-y-4 flex flex-col items-center",
-					children: (0, a.jsx)("div", {
+					children: (0,
+						a.jsx)("div", {
 						className: "grid md:grid-cols-2 xl:grid-cols-3 gap-8",
-						children: l.slice(0, t || l.length).map((e, t) => (0, a.jsx)(o, {
+						children: l.slice(0, t || l.length).map((e, t) => (0,
+							a.jsx)(o, {
 							...e
 						}, t))
 					})
@@ -335,9 +376,11 @@
 					className: r,
 					...i
 				} = e;
-				return (0, a.jsx)(n.fC, {
+				return (0,
+					a.jsx)(n.fC, {
 					ref: t,
-					className: (0, o.cn)("space-y-4", r),
+					className: (0,
+						o.cn)("space-y-4", r),
 					...i
 				})
 			});
@@ -347,9 +390,11 @@
 					className: r,
 					...i
 				} = e;
-				return (0, a.jsx)(n.ck, {
+				return (0,
+					a.jsx)(n.ck, {
 					ref: t,
-					className: (0, o.cn)("border rounded-2xl px-6 py-5 border-border-primary [&[data-state=open]]:outline-2 [&[data-state=open]]:outline outline-border-primary transition-all", r),
+					className: (0,
+						o.cn)("border rounded-2xl px-6 py-5 border-border-primary [&[data-state=open]]:outline-2 [&[data-state=open]]:outline outline-border-primary transition-all", r),
 					...i
 				})
 			});
@@ -360,13 +405,17 @@
 					children: i,
 					...l
 				} = e;
-				return (0, a.jsx)(n.h4, {
+				return (0,
+					a.jsx)(n.h4, {
 					className: "flex",
-					children: (0, a.jsxs)(n.xz, {
+					children: (0,
+						a.jsxs)(n.xz, {
 						ref: t,
-						className: (0, o.cn)("font-medium text-lg flex flex-1 items-center justify-between py-4 transition-all hover:opacity-70 outline-transparent focus:underline focus:outline-none focus:ring-transparent", "[&[data-state=open]>svg]:rotate-180", r),
+						className: (0,
+							o.cn)("font-medium text-lg flex flex-1 items-center justify-between py-4 transition-all hover:opacity-70 outline-transparent focus:underline focus:outline-none focus:ring-transparent", "[&[data-state=open]>svg]:rotate-180", r),
 						...l,
-						children: [i, (0, a.jsx)(s.Z, {
+						children: [i, (0,
+							a.jsx)(s.Z, {
 							className: "ml-4 h-4 w-4 shrink-0 transition-transform duration-200"
 						})]
 					})
@@ -379,12 +428,15 @@
 					children: i,
 					...s
 				} = e;
-				return (0, a.jsx)(n.VY, {
+				return (0,
+					a.jsx)(n.VY, {
 					ref: t,
 					className: "overflow-hidden text-md transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
 					...s,
-					children: (0, a.jsx)("div", {
-						className: (0, o.cn)("pb-4 pt-0", r),
+					children: (0,
+						a.jsx)("div", {
+						className: (0,
+							o.cn)("pb-4 pt-0", r),
 						children: i
 					})
 				})
@@ -418,15 +470,18 @@
 				s = r(39343),
 				o = r(49354),
 				l = r(38364);
-			let c = (0, r(12218).j)("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"),
+			let c = (0,
+					r(12218).j)("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"),
 				d = i.forwardRef((e, t) => {
 					let {
 						className: r,
 						...i
 					} = e;
-					return (0, a.jsx)(l.f, {
+					return (0,
+						a.jsx)(l.f, {
 						ref: t,
-						className: (0, o.cn)(c(), r),
+						className: (0,
+							o.cn)(c(), r),
 						...i
 					})
 				});
@@ -437,11 +492,13 @@
 					let {
 						...t
 					} = e;
-					return (0, a.jsx)(m.Provider, {
+					return (0,
+						a.jsx)(m.Provider, {
 						value: {
 							name: t.name
 						},
-						children: (0, a.jsx)(s.Qr, {
+						children: (0,
+							a.jsx)(s.Qr, {
 							...t
 						})
 					})
@@ -452,9 +509,11 @@
 						{
 							getFieldState: r,
 							formState: a
-						} = (0, s.Gc)(),
+						} = (0,
+							s.Gc)(),
 						n = r(e.name, a);
-					if (!e) throw Error("useFormField should be used within <FormField>");
+					if (!e)
+						throw Error("useFormField should be used within <FormField>");
 					let {
 						id: o
 					} = t;
@@ -473,13 +532,16 @@
 						className: r,
 						...n
 					} = e, s = i.useId();
-					return (0, a.jsx)(f.Provider, {
+					return (0,
+						a.jsx)(f.Provider, {
 						value: {
 							id: s
 						},
-						children: (0, a.jsx)("div", {
+						children: (0,
+							a.jsx)("div", {
 							ref: t,
-							className: (0, o.cn)("space-y-2", r),
+							className: (0,
+								o.cn)("space-y-2", r),
 							...n
 						})
 					})
@@ -493,9 +555,11 @@
 					error: n,
 					formItemId: s
 				} = g();
-				return (0, a.jsx)(d, {
+				return (0,
+					a.jsx)(d, {
 					ref: t,
-					className: (0, o.cn)(n && "text-destructive", r),
+					className: (0,
+						o.cn)(n && "text-destructive", r),
 					htmlFor: s,
 					...i
 				})
@@ -510,7 +574,8 @@
 					formDescriptionId: o,
 					formMessageId: l
 				} = g();
-				return (0, a.jsx)(n.g7, {
+				return (0,
+					a.jsx)(n.g7, {
 					ref: t,
 					id: s,
 					"aria-describedby": i ? "".concat(o, " ").concat(l) : "".concat(o),
@@ -518,20 +583,23 @@
 					...r
 				})
 			});
-			b.displayName = "FormControl", i.forwardRef((e, t) => {
-				let {
-					className: r,
-					...i
-				} = e, {
-					formDescriptionId: n
-				} = g();
-				return (0, a.jsx)("p", {
-					ref: t,
-					id: n,
-					className: (0, o.cn)("text-sm text-muted-foreground", r),
-					...i
-				})
-			}).displayName = "FormDescription";
+			b.displayName = "FormControl",
+				i.forwardRef((e, t) => {
+					let {
+						className: r,
+						...i
+					} = e, {
+						formDescriptionId: n
+					} = g();
+					return (0,
+						a.jsx)("p", {
+						ref: t,
+						id: n,
+						className: (0,
+							o.cn)("text-sm text-muted-foreground", r),
+						...i
+					})
+				}).displayName = "FormDescription";
 			let y = i.forwardRef((e, t) => {
 				let {
 					className: r,
@@ -541,10 +609,12 @@
 					error: s,
 					formMessageId: l
 				} = g(), c = s ? String(null == s ? void 0 : s.message) : i;
-				return c ? (0, a.jsx)("p", {
+				return c ? (0,
+					a.jsx)("p", {
 					ref: t,
 					id: l,
-					className: (0, o.cn)("text-sm font-medium text-destructive", r),
+					className: (0,
+						o.cn)("text-sm font-medium text-destructive", r),
 					...n,
 					children: c
 				}) : null
@@ -562,7 +632,8 @@
 			});
 			var a = r(42477);
 			let i = "phc_7TWmLqfPFKdYTF01wOoYay0qLkenh18leUwxeMFQfZ7";
-			if (!i) throw Error("NEXT_PUBLIC_POSTHOG_TOKEN not set");
+			if (!i)
+				throw Error("NEXT_PUBLIC_POSTHOG_TOKEN not set");
 			let n = {
 				api_host: "/ingest",
 				ui_host: "https://us.posthog.com",
