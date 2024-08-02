@@ -5791,8 +5791,8 @@ ${t}`))
                 t.status = "fulfilled",
                 t.value = e
             }, function(e) {
-                t.status = "fulfilled",
-                t.value = e
+                t.status = "rejected",
+                t.reason = e
             }),
             t)
         }
