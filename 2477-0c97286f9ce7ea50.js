@@ -4337,7 +4337,7 @@
                 key: "clientRateLimitContext",
                 value: function() {
                     var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0], r = (new Date).getTime(), s = null !== (e = null === (t = this.instance.persistence) || void 0 === t ? void 0 : t.get_property(eO)) && void 0 !== e ? e : {
-                        tokens: 10,
+                        tokens: this.captureEventsBurstLimit,
                         last: r
                     };
                     s.tokens += (r - s.last) / 1e3 * this.captureEventsPerSecond,
