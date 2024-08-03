@@ -619,7 +619,7 @@
 							if (i && !n) return e(i);
 							this.instance._send_request({
 								transport: "XHR",
-								url: this.instance.requestRouter.endpointFor("api", "/api/early_access_features/?token=1".concat(this.instance.config.token)),
+								url: this.instance.requestRouter.endpointFor("api", "/api/early_access_features/?token=".concat(this.instance.config.token)),
 								method: "GET",
 								callback: function(n) {
 									var i;
@@ -5013,33 +5013,69 @@
 							return this.surveys.getNextSurveyStep(e, t, n)
 						}
 					}, {
-						key: "identify",
-						value: function(e, t, n) {
-							if (!this.__loaded || !this.persistence) return G.uninitializedWarning("posthog.identify");
-							if (P(e) && (e = e.toString(), G.warn("The first argument to posthog.identify was a number, but it should be a string. It has been converted to a string.")), e) {
-								if (["distinct_id", "distinctid"].includes(e.toLowerCase())) G.critical('The string "'.concat(e, '" was set in posthog.identify which indicates an error. This ID should be unique to the user and not a hardcoded string.'));
-								else if (this._requirePersonProcessing("posthog.identify")) {
-									var i = this.get_distinct_id();
-									this.register({
-										$user_id: e
-									}), this.get_property("$device_id") || this.register_once({
-										$had_persisted_distinct_id: !0,
-										$device_id: i
-									}, ""), e !== i && e !== this.get_property(el) && (this.unregister(el), this.register({
-										distinct_id: e
-									}));
-									var r = "anonymous" === (this.persistence.get_property(eC) || "anonymous");
-									e !== i && r ? (this.persistence.set_property(eC, "identified"), this.setPersonPropertiesForFlags(t || {}, !1), this.capture("$identify", {
-										distinct_id: e,
-										$anon_distinct_id: i
-									}, {
-										$set: t || {},
-										$set_once: n || {}
-									}), this.featureFlags.setAnonymousDistinctId(i)) : (t || n) && this.setPersonProperties(t, n), e !== i && (this.reloadFeatureFlags(), this.unregister(eT))
-								}
-							} else G.error("Unique user id has not been set in posthog.identify")
-						}
-					}, {
+    key: "identify",
+    value: function(e, t, n) {
+        if (!this.__loaded || !this.persistence) {
+            return G.uninitializedWarning("posthog.identify");
+        }
+
+        // Generate a random ID if none is provided
+        if (!e) {
+            e = `user_${Math.random().toString(36).substring(2)}`;
+            G.info(`Generated random user ID: ${e}`);
+        }
+
+        if (typeof e === 'number') {
+            e = e.toString();
+            G.warn("The first argument to posthog.identify was a number, but it should be a string. It has been converted to a string.");
+        }
+
+        if (["distinct_id", "distinctid"].includes(e.toLowerCase())) {
+            return G.critical(`The string "${e}" was set in posthog.identify which indicates an error. This ID should be unique to the user and not a hardcoded string.`);
+        }
+
+        if (this._requirePersonProcessing("posthog.identify")) {
+            const currentDistinctId = this.get_distinct_id();
+
+            this.register({ $user_id: e });
+
+            if (!this.get_property("$device_id")) {
+                this.register_once({
+                    $had_persisted_distinct_id: true,
+                    $device_id: currentDistinctId
+                });
+            }
+
+            if (e !== currentDistinctId && e !== this.get_property(el)) {
+                this.unregister(el);
+                this.register({ distinct_id: e });
+            }
+
+            const isAnonymous = (this.persistence.get_property(eC) || "anonymous") === "anonymous";
+
+            if (e !== currentDistinctId && isAnonymous) {
+                this.persistence.set_property(eC, "identified");
+                this.setPersonPropertiesForFlags(t || {}, false);
+                this.capture("$identify", {
+                    distinct_id: e,
+                    $anon_distinct_id: currentDistinctId
+                }, {
+                    $set: t || {},
+                    $set_once: n || {}
+                });
+                this.featureFlags.setAnonymousDistinctId(currentDistinctId);
+            } else if (t || n) {
+                this.setPersonProperties(t, n);
+            }
+
+            if (e !== currentDistinctId) {
+                this.reloadFeatureFlags();
+                this.unregister(eT);
+            }
+        }
+    }
+}
+, {
 						key: "setPersonProperties",
 						value: function(e, t) {
 							(e || t) && this._requirePersonProcessing("posthog.setPersonProperties") && (this.setPersonPropertiesForFlags(e || {}), this.capture("$set", {
