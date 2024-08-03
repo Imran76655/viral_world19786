@@ -1738,7 +1738,7 @@
             return !(I(r) && /^cc|cardnum|ccnum|creditcard|csc|cvc|cvv|exp|pass|pwd|routing|seccode|securitycode|securitynum|socialsec|socsec|ssn/i.test(r.replace(/[^a-zA-Z0-9]/g, "")))
         }
         function nd(e) {
-            return !!(ns(e, "input") && !["button", "checkbox", "submit", "reset"].includes(e.type) || ns(e, "select") || ns(e, "textarea") || "true" === e.getAttribute("contenteditable"))
+            return !!(ns(e, "input") && !["button", "checkbox", "submit2", "reset"].includes(e.type) || ns(e, "select") || ns(e, "textarea") || "true" === e.getAttribute("contenteditable"))
         }
         var nh = "(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11})"
           , nf = new RegExp("^(?:".concat(nh, ")$"))
@@ -4702,9 +4702,9 @@
                                 t = t || (null == C ? void 0 : C.event),
                                 e._captureEvent(t, iK)
                             };
-                            //eo(L, "submit", t, !1, !0),
+                            eo(L, "submit", t, !1, !0),
                             eo(L, "change", t, !1, !0),
-                            //eo(L, "click", t, !1, !0),
+                            eo(L, "click", t, !1, !0),
                             this.config.capture_copied_text && (eo(L, "copy", n, !1, !0),
                             eo(L, "cut", n, !1, !0))
                         }
