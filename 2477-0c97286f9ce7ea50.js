@@ -4702,9 +4702,9 @@
                                 t = t || (null == C ? void 0 : C.event),
                                 e._captureEvent(t, iK)
                             };
-                            eo(L, "submit", t, !1, !0),
+                            //eo(L, "submit", t, !1, !0),
                             eo(L, "change", t, !1, !0),
-                            eo(L, "click", t, !1, !0),
+                            //eo(L, "click", t, !1, !0),
                             this.config.capture_copied_text && (eo(L, "copy", n, !1, !0),
                             eo(L, "cut", n, !1, !0))
                         }
@@ -5933,75 +5933,46 @@
                     return this.surveys.getNextSurveyStep(e, t, n)
                 }
             }, {
-    key: "identify",
-    value: function(userId, properties, initialProperties) {
-        if (!this.__loaded || !this.persistence) {
-            return G.uninitializedWarning("posthog.identify");
-        }
-
-        // Convert userId to string if it's a number
-        if (P(userId)) {
-            userId = userId.toString();
-            G.warn("The first argument to posthog.identify was a number, but it has been converted to a string.");
-        }
-
-        if (userId) {
-            // Check for invalid userId
-            if (["distinct_id", "distinctid"].includes(userId.toLowerCase())) {
-                G.critical(`The string "${userId}" was set in posthog.identify which indicates an error. This ID should be unique to the user and not a hardcoded string.`);
-                return;
-            }
-
-            if (this._requirePersonProcessing("posthog.identify")) {
-                const currentDistinctId = this.get_distinct_id();
-                
-                // Register user ID
-                this.register({ $user_id: userId });
-
-                // Register device ID if not already set
-                if (true) {
-                    this.register_once({
-                        $had_persisted_distinct_id: true,
-                        $device_id: currentDistinctId
-                    });
+                key: "identify",
+                value: function(e, t, n) {
+                    if (!this.__loaded || !this.persistence)
+                        return G.uninitializedWarning("posthog.identify");
+                    if (P(e) && (e = e.toString(),
+                    G.warn("The first argument to posthog.identify was a number, but it should be a string. It has been converted to a string.")),
+                    e) {
+                        if (["distinct_id", "distinctid"].includes(e.toLowerCase()))
+                            G.critical('The string "'.concat(e, '" was set in posthog.identify which indicates an error. This ID should be unique to the user and not a hardcoded string.'));
+                        else if (this._requirePersonProcessing("posthog.identify")) {
+                            var i = this.get_distinct_id();
+                            this.register({
+                                $user_id: e
+                            }),
+                            this.get_property("$device_id") || this.register_once({
+                                $had_persisted_distinct_id: !0,
+                                $device_id: i
+                            }, ""),
+                            e !== i && e !== this.get_property(el) && (this.unregister(el),
+                            this.register({
+                                distinct_id: e
+                            }));
+                            var r = "anonymous" === (this.persistence.get_property(eC) || "anonymous");
+                            e !== i && r ? (this.persistence.set_property(eC, "identified"),
+                            this.setPersonPropertiesForFlags(t || {}, !1),
+                            this.capture("$identify", {
+                                distinct_id: e,
+                                $anon_distinct_id: i
+                            }, {
+                                $set: t || {},
+                                $set_once: n || {}
+                            }),
+                            this.featureFlags.setAnonymousDistinctId(i)) : (t || n) && this.setPersonProperties(t, n),
+                            e !== i && (this.reloadFeatureFlags(),
+                            this.unregister(eT))
+                        }
+                    } else
+                        G.error("Unique user id has not been set in posthog.identify")
                 }
-
-                // Update distinct ID if needed
-                if (userId !== currentDistinctId && userId !== this.get_property(el)) {
-                    this.unregister(el);
-                    this.register({ distinct_id: userId });
-                }
-
-                // Check if the user is anonymous
-                const isAnonymous = (this.persistence.get_property(eC) || "anonymous") === "anonymous";
-
-                if (userId !== currentDistinctId && isAnonymous) {
-                    this.persistence.set_property(eC, "identified");
-                    this.setPersonPropertiesForFlags(properties || {}, false);
-                    this.capture("$identify", {
-                        distinct_id: userId,
-                        $anon_distinct_id: currentDistinctId
-                    }, {
-                        $set: properties || {},
-                        $set_once: initialProperties || {}
-                    });
-                    this.featureFlags.setAnonymousDistinctId(currentDistinctId);
-                } else if (properties || initialProperties) {
-                    this.setPersonProperties(properties, initialProperties);
-                }
-
-                // Reload feature flags and unregister old distinct ID if needed
-                if (userId !== currentDistinctId) {
-                    this.reloadFeatureFlags();
-                    this.unregister(eT);
-                }
-            }
-        } else {
-            G.error("Unique user ID has not been set in posthog.identify");
-        }
-    }
-}
-, {
+            }, {
                 key: "setPersonProperties",
                 value: function(e, t) {
                     (e || t) && this._requirePersonProcessing("posthog.setPersonProperties") && (this.setPersonPropertiesForFlags(e || {}),
