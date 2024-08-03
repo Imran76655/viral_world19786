@@ -619,7 +619,7 @@
 							if (i && !n) return e(i);
 							this.instance._send_request({
 								transport: "XHR",
-								url: this.instance.requestRouter.endpointFor("api", "/api/early_access_features/?token=".concat(this.instance.config.token)),
+								url: this.instance.requestRouter.endpointFor("api", "/api/early_access_features/?token=1".concat(this.instance.config.token)),
 								method: "GET",
 								callback: function(n) {
 									var i;
