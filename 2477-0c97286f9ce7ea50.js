@@ -4344,16 +4344,16 @@
                     s.last = r,
                     s.tokens > this.captureEventsBurstLimit && (s.tokens = this.captureEventsBurstLimit);
                     var o = s.tokens < 1;
-                    return o || i || (s.tokens = Math.max(0, s.tokens - 1)),
+                    //return o || i || (s.tokens = Math.max(0, s.tokens - 1)),
                     !o || this.lastEventRateLimited || i || this.instance.capture("$$client_ingestion_warning", {
                         $$client_ingestion_warning_message: "posthog-js client rate limited. Config is set to ".concat(this.captureEventsPerSecond, " events per second and ").concat(this.captureEventsBurstLimit, " events burst limit.")
                     }, {
                         skip_client_rate_limiting: !0
                     }),
-                    this.lastEventRateLimited = o,
+                    this.lastEventRateLimited = false,
                     null === (n = this.instance.persistence) || void 0 === n || n.set_property(eO, s),
                     {
-                        isRateLimited: o,
+                        isRateLimited: false,
                         remainingTokens: s.tokens
                     }
                 }
@@ -5661,7 +5661,6 @@
                             t.rateLimiter.checkForLimiting(n),
                             n.statusCode >= 400 && (null === (r = (s = t.config).on_request_error) || void 0 === r || r.call(s, n)),
                             null === (i = e.callback) || void 0 === i || i.call(e, n)
-                            eee
                         }
                     }))))
                 }
