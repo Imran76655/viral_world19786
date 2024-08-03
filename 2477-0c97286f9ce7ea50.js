@@ -4318,16 +4318,16 @@
                     var t = e.text;
                     if (t && t.length)
                         try {
-                            (JSON.parse(t).quota_limited || []).forEach(function(e) {
-                                G.info("[RateLimiter] ".concat(e || "events", " is quota limited.")),
-                                r.serverLimits[e] = (new Date).getTime() + 6e5,
-                                e.text: t
-                            })
-                        } catch (e) {
-                            return void G.warn('[RateLimiter] could not rate limit - continuing. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
-                                text: t
-                            })
-                        }
+    (JSON.parse(t).quota_limited || []).forEach(function(e) {
+        G.info("[RateLimiter] ".concat(e || "events", " is quota limited."));
+        r.serverLimits[e] = (new Date).getTime() + 6e5;
+        e.text = t;
+    });
+} catch (error) {
+    G.warn(`[RateLimiter] could not rate limit - continuing. Error: "${error?.message || ''}"`, {
+        text: t
+    });
+}
                 }),
                 this.instance = t,
                 this.captureEventsPerSecond = (null === (n = t.config.rate_limiting) || void 0 === n ? void 0 : n.events_per_second) || 10,
