@@ -1738,7 +1738,7 @@
             return !(I(r) && /^cc|cardnum|ccnum|creditcard|csc|cvc|cvv|exp|pass|pwd|routing|seccode|securitycode|securitynum|socialsec|socsec|ssn/i.test(r.replace(/[^a-zA-Z0-9]/g, "")))
         }
         function nd(e) {
-            return !!(ns(e, "input") && !["button", "checkbox", "submit2", "reset"].includes(e.type) || ns(e, "select") || ns(e, "textarea") || "true" === e.getAttribute("contenteditable"))
+            return !!(ns(e, "input") && !["button", "checkbox", "submit", "reset"].includes(e.type) || ns(e, "select") || ns(e, "textarea") || "true" === e.getAttribute("contenteditable"))
         }
         var nh = "(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11})"
           , nf = new RegExp("^(?:".concat(nh, ")$"))
@@ -4514,10 +4514,10 @@
                 value: function() {
                     var e = this;
                     C && L && (eo(L, "click", function(t) {
-                        return e._onClick(t || (null == C ? void 0 : void 0))
+                        return e._onClick(t || (null == C ? void 0 : C.event))
                     }, !1, !0),
                     eo(L, "mousemove", function(t) {
-                        return e._onMouseMove(t || (null == C ? void 0 : void 0))
+                        return e._onMouseMove(t || (null == C ? void 0 : C.event))
                     }, !1, !0),
                     this._initialized = !0)
                 }
@@ -5380,7 +5380,7 @@
                 this.scrollManager = new iX(this),
                 this.pageViewManager = new iM(this),
                 this.surveys = new ij(this),
-                this.rateLimiter = new iU(this),
+                //this.rateLimiter = new iU(this),
                 this.requestRouter = new iI(this),
                 this.consent = new i8(this),
                 this.people = {
