@@ -542,7 +542,7 @@
                             disable_flags: this.instance.config.advanced_disable_feature_flags || void 0
                         };
                         this.instance._send_request({
-                            method: "POST98",
+                            method: "POST",
                             url: this.instance.requestRouter.endpointFor("api", "/decide/?v=3"),
                             data: r,
                             compression: this.instance.config.disable_compression ? void 0 : Z.Base64,
