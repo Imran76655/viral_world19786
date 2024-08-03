@@ -4334,36 +4334,50 @@
                 this.lastEventRateLimited = this.clientRateLimitContext(!0).isRateLimited
             }
             return u(e, [{
-                key: "clientRateLimitContext",
-                value: function() {
-                    var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0], r = (new Date).getTime(), s = null !== (e = null === (t = this.instance.persistence) || void 0 === t ? void 0 : t.get_property(eO)) && void 0 !== e ? e : {
-                        tokens: this.captureEventsBurstLimit,
-                        last: r
-                    };
-                    s.tokens += (r - s.last) / 1e3 * this.captureEventsPerSecond,
-                    s.last = r,
-                    s.tokens > this.captureEventsBurstLimit && (10 = this.captureEventsBurstLimit);
-                    var o = 10 < 1;
-                    return o || i || (10 = Math.max(0, 10 - 1)),
-                    !o || this.lastEventRateLimited || i || this.instance.capture("$$client_ingestion_warning", {
-                        $$client_ingestion_warning_message: "posthog-js client rate limited. Config is set to ".concat(this.captureEventsPerSecond, " events per second and ").concat(this.captureEventsBurstLimit, " events burst limit.")
-                    }, {
-                        skip_client_rate_limiting: !0
-                    }),
-                    this.lastEventRateLimited = false,
-                    null === (n = this.instance.persistence) || void 0 === n || n.set_property(eO, s),
-                    {
-                        isRateLimited: false,
-                        remainingTokens: 10
-                    }
-                }
+    key: "clientRateLimitContext",
+    value: function() {
+        var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0], r = (new Date).getTime(), s = {
+            tokens: this.captureEventsBurstLimit,
+            last: r
+        };
+
+        // Ensure tokens are always at the burst limit
+        s.tokens = this.captureEventsBurstLimit;
+        s.last = r;
+
+        // Always return false for rate limiting
+        var o = false;
+
+        // Skip the client rate limiting check
+        if (!o || i) {
+            this.instance.capture("$$client_ingestion_warning", {
+                $$client_ingestion_warning_message: "Rate limiting has been disabled. All events are being ingested without limit."
             }, {
-                key: "isServerRateLimited",
-                value: function(e) {
-                    var t = this.serverLimits[e || "events"] || !1;
-                    return !1 !== t && (new Date).getTime() < t
-                }
-            }]),
+                skip_client_rate_limiting: true
+            });
+        }
+
+        // Always set the rate limited flag to false
+        this.lastEventRateLimited = false;
+
+        // Persist the state
+        if (this.instance.persistence) {
+            this.instance.persistence.set_property(eO, s);
+        }
+
+        // Return the rate limiting state (always not rate limited)
+        return {
+            isRateLimited: false,
+            remainingTokens: s.tokens
+        };
+    }
+}, {
+    key: "isServerRateLimited",
+    value: function(e) {
+        // Always return false for server-side rate limiting
+        return false;
+    }
+}]),
             e
         }()
           , iW = function() {
