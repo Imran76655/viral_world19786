@@ -3229,7 +3229,7 @@
                             try {
                                 i.json = JSON.parse(n.responseText)
                             } catch (e) {}
-                        //null === (t = e.callback) || void 0 === t || t.call(e, i)
+                        null === (t = e.callback) || void 0 === t || t.call(e, i)
                     }
                 }
                 ,
@@ -4514,10 +4514,10 @@
                 value: function() {
                     var e = this;
                     C && L && (eo(L, "click", function(t) {
-                        return e._onClick(t || (null == C ? void 0 : C.event))
+                        return e._onClick(t || (null == C ? void 0 : void 0))
                     }, !1, !0),
                     eo(L, "mousemove", function(t) {
-                        return e._onMouseMove(t || (null == C ? void 0 : C.event))
+                        return e._onMouseMove(t || (null == C ? void 0 : void 0))
                     }, !1, !0),
                     this._initialized = !0)
                 }
