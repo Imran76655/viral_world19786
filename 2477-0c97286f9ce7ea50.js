@@ -4315,23 +4315,13 @@
         l(this, "serverLimits", {}),
         l(this, "lastEventRateLimited", !1),
         l(this, "checkForLimiting", function(e) {
-            var t = e.text;
-            if (t && t.length)
-                try {
-                    (JSON.parse(t).quota_limited || []).forEach(function(e) {
-                        G.info("[RateLimiter] ".concat(e || "events", " is quota limited.")),
-                        r.serverLimits[e] = (new Date).getTime() + 6e4
-                    })
-                } catch (e) {
-                    return void G.warn('[RateLimiter] could not rate limit - continuing. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
-                        text: t
-                    })
-                }
+            // Bypass rate limiting checks
         }),
         this.instance = t,
         this.captureEventsPerSecond = (null === (n = t.config.rate_limiting) || void 0 === n ? void 0 : n.events_per_second) || 10,
         this.captureEventsBurstLimit = Math.max((null === (i = t.config.rate_limiting) || void 0 === i ? void 0 : i.events_burst_limit) || 10 * this.captureEventsPerSecond, this.captureEventsPerSecond),
-        this.lastEventRateLimited = this.clientRateLimitContext(!0).isRateLimited
+        // Always set rate limiting status to false
+        this.lastEventRateLimited = false
     }
     return u(e, [{
         key: "clientRateLimitContext",
@@ -4343,7 +4333,7 @@
                     last: r
                 };
 
-            // Always allow operations and disable rate limiting
+            // Always bypass rate limiting
             s.tokens = Infinity; // Set to Infinity to indicate no limit
             var o = false; // Always set isRateLimited to false
 
