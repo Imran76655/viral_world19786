@@ -4312,8 +4312,8 @@
             function e(t) {
                 var n, i, r = this;
                 //o(this, e),
-                l(this, "serverLimits", {}),
-                l(this, "lastEventRateLimited", !1),
+                //l(this, "serverLimits", {}),
+                //l(this, "lastEventRateLimited", !1),
                 l(this, "checkForLimiting", function(e) {
                     var t = e.text;
                     if (t && t.length)
