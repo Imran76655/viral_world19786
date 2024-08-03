@@ -4388,9 +4388,7 @@
         }
     }]),
     e;
-}() ,
-            e
-        }()
+}()
           , iW = function() {
             return r({
                 initialPathName: (null == N ? void 0 : N.pathname) || "",
