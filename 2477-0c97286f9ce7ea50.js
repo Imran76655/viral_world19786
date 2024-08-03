@@ -4309,49 +4309,63 @@
             e
         }()
           , iU = function() {
-    function e(t) {
-        var n, i, r = this;
-        o(this, e),
-        l(this, "serverLimits", {}),
-        l(this, "lastEventRateLimited", !1),
-        l(this, "checkForLimiting", function(e) {
-            // Bypass rate limiting checks
-        }),
-        this.instance = t,
-        this.captureEventsPerSecond = (null === (n = t.config.rate_limiting) || void 0 === n ? void 0 : n.events_per_second) || 10,
-        this.captureEventsBurstLimit = Math.max((null === (i = t.config.rate_limiting) || void 0 === i ? void 0 : i.events_burst_limit) || 10 * this.captureEventsPerSecond, this.captureEventsPerSecond),
-        // Always set rate limiting status to false
-        this.lastEventRateLimited = false
-    }
-    return u(e, [{
-        key: "clientRateLimitContext",
-        value: function() {
-            var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0],
-                r = (new Date).getTime(),
-                s = null !== (e = null === (t = this.instance.persistence) || void 0 === t ? void 0 : t.get_property(eO)) && void 0 !== e ? e : {
-                    tokens: this.captureEventsBurstLimit,
-                    last: r
-                };
-
-            // Always bypass rate limiting
-            s.tokens = Infinity; // Set to Infinity to indicate no limit
-            var o = false; // Always set isRateLimited to false
-
-            // Return results indicating no rate limit
-            return {
-                isRateLimited: o,
-                remainingTokens: s.tokens
-            };
-        }
-    }, {
-        key: "isServerRateLimited",
-        value: function(e) {
-            // Always return false to indicate no server rate limiting
-            return false;
-        }
-    }]),
-    e
-}()
+            function e(t) {
+                var n, i, r = this;
+                o(this, e),
+                l(this, "serverLimits", {}),
+                l(this, "lastEventRateLimited", !1),
+                l(this, "checkForLimiting", function(e) {
+                    var t = e.text;
+                    if (t && t.length)
+                        try {
+                            (JSON.parse(t).quota_limited || []).forEach(function(e) {
+                                G.info("[RateLimiter] ".concat(e || "events", " is quota limited.")),
+                                r.serverLimits[e] = (new Date).getTime() + 6e4
+                            })
+                        } catch (e) {
+                            return void G.warn('[RateLimiter] could not rate limit - continuing. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
+                                text: t
+                            })
+                        }
+                }),
+                this.instance = t,
+                this.captureEventsPerSecond = (null === (n = t.config.rate_limiting) || void 0 === n ? void 0 : n.events_per_second) || 10,
+                this.captureEventsBurstLimit = Math.max((null === (i = t.config.rate_limiting) || void 0 === i ? void 0 : i.events_burst_limit) || 10 * this.captureEventsPerSecond, this.captureEventsPerSecond),
+                this.lastEventRateLimited = this.clientRateLimitContext(!0).isRateLimited
+            }
+            return u(e, [{
+                key: "clientRateLimitContext",
+                value: function() {
+                    var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0], r = (new Date).getTime(), s = null !== (e = null === (t = this.instance.persistence) || void 0 === t ? void 0 : t.get_property(eO)) && void 0 !== e ? e : {
+                        tokens: this.captureEventsBurstLimit,
+                        last: r
+                    };
+                    s.tokens += (r - s.last) / 1e3 * this.captureEventsPerSecond,
+                    s.last = r,
+                    s.tokens > this.captureEventsBurstLimit && (s.tokens = this.captureEventsBurstLimit);
+                    var o = s.tokens < 1;
+                    return o || i || (s.tokens = Math.max(0, s.tokens - 1)),
+                    !o || this.lastEventRateLimited || i || this.instance.capture("$$client_ingestion_warning", {
+                        $$client_ingestion_warning_message: "posthog-js client rate limited. Config is set to ".concat(this.captureEventsPerSecond, " events per second and ").concat(this.captureEventsBurstLimit, " events burst limit.")
+                    }, {
+                        skip_client_rate_limiting: !0
+                    }),
+                    this.lastEventRateLimited = o,
+                    null === (n = this.instance.persistence) || void 0 === n || n.set_property(eO, s),
+                    {
+                        isRateLimited: o,
+                        remainingTokens: s.tokens
+                    }
+                }
+            }, {
+                key: "isServerRateLimited",
+                value: function(e) {
+                    var t = this.serverLimits[e || "events"] || !1;
+                    return !1 !== t && (new Date).getTime() < t
+                }
+            }]),
+            e
+        }()
           , iW = function() {
             return r({
                 initialPathName: (null == N ? void 0 : N.pathname) || "",
@@ -5366,7 +5380,7 @@
                 this.scrollManager = new iX(this),
                 this.pageViewManager = new iM(this),
                 this.surveys = new ij(this),
-                this.rateLimiter = new iU(this),
+                this.rateLimiter = null,
                 this.requestRouter = new iI(this),
                 this.consent = new i8(this),
                 this.people = {
