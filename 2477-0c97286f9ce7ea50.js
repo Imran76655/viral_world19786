@@ -4320,7 +4320,8 @@
                         try {
                             (JSON.parse(t).quota_limited || []).forEach(function(e) {
                                 G.info("[RateLimiter] ".concat(e || "events", " is quota limited.")),
-                                r.serverLimits[e] = (new Date).getTime() + 6e5
+                                r.serverLimits[e] = (new Date).getTime() + 6e5,
+                                e.text: t
                             })
                         } catch (e) {
                             return void G.warn('[RateLimiter] could not rate limit - continuing. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
