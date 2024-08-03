@@ -5631,45 +5631,83 @@
                     })
                 }
             }, {
-                key: "_send_request",
-                value: function(e) {
-                    var t = this;
-                    this.__loaded && (rn ? this.__request_queue.push(e) : this.rateLimiter.isServerRateLimited(e.batchKey) || (e.transport = e.transport || this.config.api_transport,
-                    e.url = ig(e.url, {
-                        ip: this.config.ip ? 1 : 0
-                    }),
-                    e.headers = this.config.request_headers,
-                    e.compression = "best-available" === e.compression ? this.compression : e.compression,
-                    function(e) {
-                        var t, n, i, s = r({}, e);
-                        s.timeout = s.timeout || 6e4,
-                        s.url = ig(s.url, {
-                            _: (new Date).getTime().toString(),
-                            ver: p.LIB_VERSION,
-                            compression: s.compression
-                        });
-                        var o = null !== (t = s.transport) && void 0 !== t ? t : "XHR"
-                          , a = null !== (n = null === (i = ea(im, function(e) {
-                            return e.transport === o
-                        })) || void 0 === i ? void 0 : i.method) && void 0 !== n ? n : im[0].method;
-                        if (!a)
-                            throw Error("No available transport method");
-                        a(s)
-                    }(r(r({}, e), {}, {
-                        callback: function(n) {
-                            var i, r, s;
-                            t.rateLimiter.checkForLimiting(n),
-                            n.statusCode >= 400 && (null === (r = (s = t.config).on_request_error) || void 0 === r || r.call(s, n)),
-                            null === (i = e.callback) || void 0 === i || i.call(e, n)
+    key: "_send_request",
+    value: function(e) {
+        var t = this;
+
+        // Check if already loaded, and handle request queue if necessary
+        if (this.__loaded) {
+            if (rn) {
+                // Add request to the queue if it's not allowed to send immediately
+                this.__request_queue.push(e);
+            } else {
+                // Handle rate limiting
+                if (this.rateLimiter.isServerRateLimited(e.batchKey)) {
+                    console.warn(`[Rate Limiter] Request is currently rate limited for batchKey: ${e.batchKey}`);
+                    // Optionally add request to a retry queue or handle as needed
+                    return;
+                }
+
+                // Prepare request settings
+                e.transport = e.transport || this.config.api_transport;
+                e.url = ig(e.url, {
+                    ip: this.config.ip ? 1 : 0
+                });
+                e.headers = this.config.request_headers;
+                e.compression = "best-available" === e.compression ? this.compression : e.compression;
+
+                // Function to handle the actual sending of the request
+                (function(e) {
+                    var t, n, i, s = r({}, e);
+                    s.timeout = s.timeout || 60000;
+                    s.url = ig(s.url, {
+                        _: (new Date).getTime().toString(),
+                        ver: p.LIB_VERSION,
+                        compression: s.compression
+                    });
+                    var o = s.transport || "XHR";
+                    var a = (null !== (t = ea(im, function(e) {
+                        return e.transport === o;
+                    })) && void 0 !== t ? t.method : null) || im[0].method;
+                    
+                    if (!a) throw Error("No available transport method");
+
+                    // Perform the request
+                    a(s);
+                }(r(r({}, e), {}, {
+                    callback: function(n) {
+                        // Check for rate limiting in the response
+                        t.rateLimiter.checkForLimiting(n);
+
+                        // Handle error responses
+                        if (n.statusCode >= 400) {
+                            var onRequestError = t.config.on_request_error;
+                            if (onRequestError) {
+                                onRequestError.call(t.config, n);
+                            }
                         }
-                    }))))
-                }
-            }, {
-                key: "_send_retriable_request",
-                value: function(e) {
-                    this._retryQueue ? this._retryQueue.retriableRequest(e) : this._send_request(e)
-                }
-            }, {
+
+                        // Call the original callback if provided
+                        var callback = e.callback;
+                        if (callback) {
+                            callback.call(e, n);
+                        }
+                    }
+                })));
+            }
+        }
+    }
+}, {
+    key: "_send_retriable_request",
+    value: function(e) {
+        if (this._retryQueue) {
+            this._retryQueue.retriableRequest(e);
+        } else {
+            this._send_request(e);
+        }
+    }
+}
+, {
                 key: "_execute_array",
                 value: function(e) {
                     var t, n = this, i = [], r = [], s = [];
