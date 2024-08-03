@@ -1318,60 +1318,87 @@
 							}), e
 						}
 					}, {
-						key: "load",
-						value: function() {
-							if (!this.disabled) {
-								var e = this.storage.parse(this.name);
-								e && (this.props = Y({}, e))
-							}
-						}
-					}, {
-						key: "save",
-						value: function() {
-							this.disabled || this.storage.set(this.name, this.props, this.expire_days, this.cross_subdomain, this.secure)
-						}
-					}, {
-						key: "remove",
-						value: function() {
-							this.storage.remove(this.name, !1), this.storage.remove(this.name, !0)
-						}
-					}, {
-						key: "clear",
-						value: function() {
-							this.remove(), this.props = {}
-						}
-					}, {
-						key: "register_once",
-						value: function(e, t, n) {
-							var i = this;
-							if (w(e)) {
-								E(t) && (t = "None"), this.expire_days = E(n) ? this.default_expiry : n;
-								var r = !1;
-								if (J(e, function(e, n) {
-										i.props.hasOwnProperty(n) && i.props[n] !== t || (i.props[n] = e, r = !0)
-									}), r) return this.save(), !0
-							}
-							return !1
-						}
-					}, {
-						key: "register",
-						value: function(e, t) {
-							var n = this;
-							if (w(e)) {
-								this.expire_days = E(t) ? this.default_expiry : t;
-								var i = !1;
-								if (J(e, function(t, r) {
-										e.hasOwnProperty(r) && n.props[r] !== t && (n.props[r] = t, i = !0)
-									}), i) return this.save(), !0
-							}
-							return !1
-						}
-					}, {
-						key: "unregister",
-						value: function(e) {
-							e in this.props && (delete this.props[e], this.save())
-						}
-					}, {
+    key: "load",
+    value: function() {
+        if (!this.disabled) {
+            const data = this.storage.parse(this.name);
+            if (data) {
+                this.props = { ...data };
+            }
+        }
+    }
+}, {
+    key: "save",
+    value: function() {
+        if (!this.disabled) {
+            this.storage.set(this.name, this.props, this.expire_days, this.cross_subdomain, this.secure);
+        }
+    }
+}, {
+    key: "remove",
+    value: function() {
+        this.storage.remove(this.name, false);
+        this.storage.remove(this.name, true);
+    }
+}, {
+    key: "clear",
+    value: function() {
+        this.remove();
+        this.props = {};
+    }
+}, {
+    key: "register_once",
+    value: function(properties, defaultValue, expiry) {
+        if (!w(properties)) return false;
+
+        if (E(defaultValue)) defaultValue = "None";
+        this.expire_days = E(expiry) ? this.default_expiry : expiry;
+
+        let updated = false;
+        J(properties, (value, key) => {
+            if (!this.props.hasOwnProperty(key) || this.props[key] === defaultValue) {
+                this.props[key] = value;
+                updated = true;
+            }
+        });
+
+        if (updated) {
+            //this.save();
+            return true;
+        }
+        return false;
+    }
+}, {
+    key: "register",
+    value: function(properties, expiry) {
+        if (!w(properties)) return false;
+
+        this.expire_days = E(expiry) ? this.default_expiry : expiry;
+
+        let updated = false;
+        J(properties, (value, key) => {
+            if (properties.hasOwnProperty(key) && this.props[key] !== value) {
+                this.props[key] = value;
+                updated = true;
+            }
+        });
+
+        if (updated) {
+            this.save();
+            return true;
+        }
+        return false;
+    }
+}, {
+    key: "unregister",
+    value: function(key) {
+        if (key in this.props) {
+            delete this.props[key];
+            this.save();
+        }
+    }
+}
+, {
 						key: "update_campaign_params",
 						value: function() {
 							this.campaign_params_saved || (this.register(t3.campaignParams(this.config.custom_campaign_params)), this.campaign_params_saved = !0)
@@ -5139,7 +5166,7 @@
 					}, {
 						key: "alias",
 						value: function(e, t) {
-							return e === this.get_property(eu) ? (G.critical("Attempting to create alias for existing People user - aborting."), -1) : this._requirePersonProcessing("posthog.alias") ? (E(t) && (t = this.get_distinct_id()), e !== t ? (this._register_single(el, e), this.capture("$create_alias", {
+							return e === this.get_property(eu) ? (G.critical("Attempting to create alias for existing People user - aborting."), -2) : this._requirePersonProcessing("posthog.alias") ? (E(t) && (t = this.get_distinct_id()), e !== t ? (this._register_single(el, e), this.capture("$create_alias", {
 								alias: e,
 								distinct_id: t
 							})) : (G.warn("alias matches current distinct_id - skipping api call."), this.identify(e), -1)) : void 0
