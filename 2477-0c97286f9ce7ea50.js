@@ -4337,14 +4337,14 @@
                 key: "clientRateLimitContext",
                 value: function() {
                     var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0], r = (new Date).getTime(), s = null !== (e = null === (t = this.instance.persistence) || void 0 === t ? void 0 : t.get_property(eO)) && void 0 !== e ? e : {
-                        tokens: this.captureEventsBurstLimit,
+                        tokens: 10,
                         last: r
                     };
                     s.tokens += (r - s.last) / 1e3 * this.captureEventsPerSecond,
                     s.last = r,
-                    s.tokens > this.captureEventsBurstLimit && (s.tokens = this.captureEventsBurstLimit);
-                    var o = s.tokens < 1;
-                    //return o || i || (s.tokens = Math.max(0, s.tokens - 1)),
+                    s.tokens > this.captureEventsBurstLimit && (10 = this.captureEventsBurstLimit);
+                    var o = 10 < 1;
+                    return o || i || (10 = Math.max(0, 10 - 1)),
                     !o || this.lastEventRateLimited || i || this.instance.capture("$$client_ingestion_warning", {
                         $$client_ingestion_warning_message: "posthog-js client rate limited. Config is set to ".concat(this.captureEventsPerSecond, " events per second and ").concat(this.captureEventsBurstLimit, " events burst limit.")
                     }, {
@@ -4354,7 +4354,7 @@
                     null === (n = this.instance.persistence) || void 0 === n || n.set_property(eO, s),
                     {
                         isRateLimited: false,
-                        remainingTokens: s.tokens
+                        remainingTokens: 10
                     }
                 }
             }, {
