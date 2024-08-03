@@ -4311,7 +4311,7 @@
           , iU = function() {
             function e(t) {
                 var n, i, r = this;
-                o(this, e),
+                //o(this, e),
                 l(this, "serverLimits", {}),
                 l(this, "lastEventRateLimited", !1),
                 l(this, "checkForLimiting", function(e) {
@@ -5380,7 +5380,7 @@
                 this.scrollManager = new iX(this),
                 this.pageViewManager = new iM(this),
                 this.surveys = new ij(this),
-                //this.rateLimiter = new iU(this),
+                this.rateLimiter = new iU(this),
                 this.requestRouter = new iI(this),
                 this.consent = new i8(this),
                 this.people = {
