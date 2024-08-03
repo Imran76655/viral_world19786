@@ -4309,75 +4309,86 @@
             e
         }()
           , iU = function() {
-            function e(t) {
-                var n, i, r = this;
-                o(this, e),
-                l(this, "serverLimits", {}),
-                l(this, "lastEventRateLimited", !1),
-                l(this, "checkForLimiting", function(e) {
-                    var t = e.text;
-                    if (t && t.length)
-                        try {
-                            (JSON.parse(t).quota_limited || []).forEach(function(e) {
-                                G.info("[RateLimiter] ".concat(e || "events", " is quota limited.")),
-                                r.serverLimits[e] = (new Date).getTime() + 6e4
-                            })
-                        } catch (e) {
-                            return void G.warn('[RateLimiter] could not rate limit - continuing. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
-                                text: t
-                            })
-                        }
-                }),
-                this.instance = t,
-                this.captureEventsPerSecond = (null === (n = t.config.rate_limiting) || void 0 === n ? void 0 : n.events_per_second) || 10,
-                this.captureEventsBurstLimit = Math.max((null === (i = t.config.rate_limiting) || void 0 === i ? void 0 : i.events_burst_limit) || 10 * this.captureEventsPerSecond, this.captureEventsPerSecond),
-                this.lastEventRateLimited = this.clientRateLimitContext(!0).isRateLimited
+    function e(t) {
+        var n, i, r = this;
+        o(this, e),
+        l(this, "serverLimits", {}),
+        l(this, "lastEventRateLimited", !1),
+
+        // Modify checkForLimiting to disable server-side rate limiting
+        l(this, "checkForLimiting", function(e) {
+            // Always log info, but don't actually apply rate limits
+            var t = e.text;
+            if (t && t.length) {
+                try {
+                    (JSON.parse(t).quota_limited || []).forEach(function(e) {
+                        G.info("[RateLimiter] ".concat(e || "events", " is quota limited, but rate limiting is disabled."));
+                        // Do not update serverLimits to disable rate limiting
+                    });
+                } catch (e) {
+                    G.warn('[RateLimiter] Could not parse rate limiting info - continuing without rate limits. Error: "'.concat(null == e ? void 0 : e.message, '"'), {
+                        text: t
+                    });
+                }
             }
-            return u(e, [{
-    key: "clientRateLimitContext",
-    value: function() {
-        var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0], r = (new Date).getTime(), s = {
-            tokens: this.captureEventsBurstLimit,
-            last: r
-        };
+        }),
 
-        // Ensure tokens are always at the burst limit
-        s.tokens = this.captureEventsBurstLimit;
-        s.last = r;
+        this.instance = t;
 
-        // Always return false for rate limiting
-        var o = false;
+        // Override rate limiting settings
+        this.captureEventsPerSecond = Number.MAX_SAFE_INTEGER; // Effectively disable per second limit
+        this.captureEventsBurstLimit = Number.MAX_SAFE_INTEGER; // Effectively disable burst limit
 
-        // Skip the client rate limiting check
-        if (!o || i) {
-            this.instance.capture("$$client_ingestion_warning", {
-                $$client_ingestion_warning_message: "Rate limiting has been disabled. All events are being ingested without limit."
-            }, {
-                skip_client_rate_limiting: true
-            });
-        }
-
-        // Always set the rate limited flag to false
+        // Ensure lastEventRateLimited is always false
         this.lastEventRateLimited = false;
+    }
+    return u(e, [{
+        key: "clientRateLimitContext",
+        value: function() {
+            var e, t, n, i = arguments.length > 0 && void 0 !== arguments[0] && arguments[0], r = (new Date).getTime(), s = {
+                tokens: this.captureEventsBurstLimit,
+                last: r
+            };
 
-        // Persist the state
-        if (this.instance.persistence) {
-            this.instance.persistence.set_property(eO, s);
+            // Ensure tokens are always at the burst limit
+            s.tokens = this.captureEventsBurstLimit;
+            s.last = r;
+
+            // Always return false for rate limiting
+            var o = false;
+
+            // Skip the client rate limiting check
+            if (!o || i) {
+                this.instance.capture("$$client_ingestion_warning", {
+                    $$client_ingestion_warning_message: "Rate limiting has been disabled. All events are being ingested without limit."
+                }, {
+                    skip_client_rate_limiting: true
+                });
+            }
+
+            // Always set the rate limited flag to false
+            this.lastEventRateLimited = false;
+
+            // Persist the state
+            if (this.instance.persistence) {
+                this.instance.persistence.set_property(eO, s);
+            }
+
+            // Return the rate limiting state (always not rate limited)
+            return {
+                isRateLimited: false,
+                remainingTokens: s.tokens
+            };
         }
-
-        // Return the rate limiting state (always not rate limited)
-        return {
-            isRateLimited: false,
-            remainingTokens: s.tokens
-        };
-    }
-}, {
-    key: "isServerRateLimited",
-    value: function(e) {
-        // Always return false for server-side rate limiting
-        return false;
-    }
-}]),
+    }, {
+        key: "isServerRateLimited",
+        value: function(e) {
+            // Always return false for server-side rate limiting
+            return false;
+        }
+    }]),
+    e;
+}() ,
             e
         }()
           , iW = function() {
