@@ -1862,55 +1862,60 @@
                 recordInitialRequests: u
             })
         }, nO = u(function e(t) {
-            var n, i, r = this, s = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
-            o(this, e),
-            l(this, "bucketSize", 100),
-            l(this, "refillRate", 10),
-            l(this, "mutationBuckets", {}),
-            l(this, "loggedTracker", {}),
-            l(this, "refillBuckets", function() {
-                Object.keys(r.mutationBuckets).forEach(function(e) {
-                    r.mutationBuckets[e] = r.mutationBuckets[e] + r.refillRate,
-                    r.mutationBuckets[e] >= r.bucketSize && delete r.mutationBuckets[e]
-                })
-            }),
-            l(this, "getNodeOrRelevantParent", function(e) {
-                var t = r.rrweb.mirror.getNode(e);
-                if ("svg" !== (null == t ? void 0 : t.nodeName) && t instanceof Element) {
-                    var n = t.closest("svg");
-                    if (n)
-                        return [r.rrweb.mirror.getId(n), n]
-                }
-                return [e, t]
-            }),
-            l(this, "numberOfChanges", function(e) {
-                var t, n, i, r, s, o, a, u;
-                return (null !== (t = null === (n = e.removes) || void 0 === n ? void 0 : n.length) && void 0 !== t ? t : 0) + (null !== (i = null === (r = e.attributes) || void 0 === r ? void 0 : r.length) && void 0 !== i ? i : 0) + (null !== (s = null === (o = e.texts) || void 0 === o ? void 0 : o.length) && void 0 !== s ? s : 0) + (null !== (a = null === (u = e.adds) || void 0 === u ? void 0 : u.length) && void 0 !== a ? a : 0)
-            }),
-            l(this, "throttleMutations", function(e) {
-                if (3 !== e.type || 0 !== e.data.source)
-                    return e;
-                var t = e.data
-                  , n = r.numberOfChanges(t);
-                t.attributes && (t.attributes = t.attributes.filter(function(e) {
-                    var t, n, i, s = c(r.getNodeOrRelevantParent(e.id), 2), o = s[0], a = s[1];
-                    return 0 !== r.mutationBuckets[o] && (r.mutationBuckets[o] = null !== (t = r.mutationBuckets[o]) && void 0 !== t ? t : r.bucketSize,
-                    r.mutationBuckets[o] = Math.max(r.mutationBuckets[o] - 1, 0),
-                    0 === r.mutationBuckets[o] && (r.loggedTracker[o] || (r.loggedTracker[o] = !0,
-                    null === (n = (i = r.options).onBlockedNode) || void 0 === n || n.call(i, o, a))),
-                    e)
-                }));
-                var i = r.numberOfChanges(t);
-                return 0 !== i || n === i ? e : void 0
-            }),
-            this.rrweb = t,
-            this.options = s,
-            this.refillRate = null !== (n = this.options.refillRate) && void 0 !== n ? n : this.refillRate,
-            this.bucketSize = null !== (i = this.options.bucketSize) && void 0 !== i ? i : this.bucketSize,
-            setInterval(function() {
-                r.refillBuckets()
-            }, 1e3)
-        }), nA = [t7.MouseMove, t7.MouseInteraction, t7.Scroll, t7.ViewportResize, t7.Input, t7.TouchMove, t7.MediaInteraction, t7.Drag], nM = function(e) {
+    var n, i, r = this, s = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+    o(this, e);
+
+    // Set bucketSize and refillRate to very high values to bypass limits
+    l(this, "bucketSize", Number.MAX_SAFE_INTEGER);
+    l(this, "refillRate", Number.MAX_SAFE_INTEGER);
+
+    l(this, "mutationBuckets", {});
+    l(this, "loggedTracker", {});
+
+    // Disable bucket refilling as buckets are always "full"
+    l(this, "refillBuckets", function() {});
+
+    l(this, "getNodeOrRelevantParent", function(e) {
+        var t = r.rrweb.mirror.getNode(e);
+        if ("svg" !== (null == t ? void 0 : t.nodeName) && t instanceof Element) {
+            var n = t.closest("svg");
+            if (n) return [r.rrweb.mirror.getId(n), n];
+        }
+        return [e, t];
+    });
+
+    l(this, "numberOfChanges", function(e) {
+        var t, n, i, r, s, o, a, u;
+        return (
+            (null !== (t = null === (n = e.removes) || void 0 === n ? void 0 : n.length) && void 0 !== t ? t : 0) +
+            (null !== (i = null === (r = e.attributes) || void 0 === r ? void 0 : r.length) && void 0 !== i ? i : 0) +
+            (null !== (s = null === (o = e.texts) || void 0 === o ? void 0 : o.length) && void 0 !== s ? s : 0) +
+            (null !== (a = null === (u = e.adds) || void 0 === u ? void 0 : u.length) && void 0 !== a ? a : 0)
+        );
+    });
+
+    l(this, "throttleMutations", function(e) {
+        if (3 !== e.type || 0 !== e.data.source) return e;
+        var t = e.data, n = r.numberOfChanges(t);
+
+        // Always allow mutations by skipping bucket checks
+        t.attributes && (t.attributes = t.attributes.filter(function(e) {
+            var s = c(r.getNodeOrRelevantParent(e.id), 2), o = s[0], a = s[1];
+            return e; // No filtering, always allow
+        }));
+
+        var i = r.numberOfChanges(t);
+        return 0 !== i || n === i ? e : void 0;
+    });
+
+    this.rrweb = t;
+    this.options = s;
+
+    this.refillRate = Number.MAX_SAFE_INTEGER;
+    this.bucketSize = Number.MAX_SAFE_INTEGER;
+
+    // No need to run setInterval as we are not refilling buckets
+}), nA = [t7.MouseMove, t7.MouseInteraction, t7.Scroll, t7.ViewportResize, t7.Input, t7.TouchMove, t7.MediaInteraction, t7.Drag], nM = function(e) {
             return {
                 rrwebMethod: e,
                 enqueuedAt: Date.now(),
